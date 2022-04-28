@@ -56,7 +56,9 @@ class SuccessScanScreen extends StatelessWidget {
                 ),
                 CustomButton(
                     text: 'Kembali',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     backgroundColor: kPrimaryColor),
               ],
             ),

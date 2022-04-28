@@ -60,7 +60,7 @@ class SignInScreen extends StatelessWidget {
                 CustomButton(
                     text: 'Masuk',
                     onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
+                      Navigator.pushNamed(context, 'page');
                     },
                     backgroundColor: kPrimaryColor),
                 Container(
@@ -76,7 +76,9 @@ class SignInScreen extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, '/register');
+                        },
                         child: new Text(
                           'Daftar',
                           style: purpleTextStyle.copyWith(

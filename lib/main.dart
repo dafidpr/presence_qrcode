@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:presence_qrcode/router/main.dart';
 import 'package:presence_qrcode/ui/pages/failed_scan.dart';
+import 'package:presence_qrcode/ui/pages/home.dart';
 import 'package:presence_qrcode/ui/pages/signin.dart';
 import 'package:presence_qrcode/ui/pages/signup.dart';
 import 'package:presence_qrcode/ui/pages/splash.dart';
@@ -16,15 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SuccessScanScreen(),
-      // routes: {
-      //   '/splash': (context) => SplashScreen(),
-      //   '/signin': (context) => SignInScreen(),
-      //   '/signup': (context) => SignUpScreen(),
-      //   '/success_signup': (context) => SuccessSignUpScreen(),
-      //   '/success_scan': (context) => SuccessScanScreen(),
-      //   '/failed_scan': (context) => FailedScanScreen(),
-      // },
+      routes: buildRouter(context),
+      initialRoute: '/splash',
     );
   }
 }

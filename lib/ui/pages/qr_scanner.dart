@@ -1,12 +1,49 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:iconly/iconly.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:presence_qrcode/shared/theme.dart';
 import 'package:presence_qrcode/ui/widgets/custom_button.dart';
-import 'package:presence_qrcode/ui/widgets/custom_input.dart';
 
-class SuccessSignUpScreen extends StatelessWidget {
-  const SuccessSignUpScreen({Key? key}) : super(key: key);
+class QRScannerScreen extends StatefulWidget {
+  const QRScannerScreen({Key? key}) : super(key: key);
+
+  @override
+  State<QRScannerScreen> createState() => _QRScannerScreenState();
+}
+
+class _QRScannerScreenState extends State<QRScannerScreen> {
+  String _qrScanResult = 'Unknown';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> scanQR() async {
+    String? qrScanRes;
+    try {
+      qrScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Batal', true, ScanMode.QR);
+    } on PlatformException {
+      qrScanRes = 'Failed to get QR code';
+    }
+    if (!mounted) return;
+    setState(() {
+      qrScanRes = qrScanRes;
+    });
+    actionRequest(qrScanRes);
+    print(qrScanRes);
+  }
+
+  Future<void> actionRequest(String? qrCode) async {
+    if (qrCode != null) {
+      Navigator.pushNamed(context, '/success-scan');
+    } else {
+      Navigator.pushNamed(context, '/failed-scan');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +61,7 @@ class SuccessSignUpScreen extends StatelessWidget {
                       bottom: 35),
                   child: Center(
                     child: Image.asset(
-                      'assets/images/success_register.png',
+                      'assets/images/scan.png',
                       width: 253,
                     ),
                   ),
@@ -32,7 +69,7 @@ class SuccessSignUpScreen extends StatelessWidget {
                 Container(
                   child: Center(
                     child: Text(
-                      'Yeayy! Registrasi akun \nkamu berhasil',
+                      'Yukk Absen!',
                       textAlign: TextAlign.center,
                       style: blackTextStyle.copyWith(
                         fontSize: 16,
@@ -47,7 +84,7 @@ class SuccessSignUpScreen extends StatelessWidget {
                 Container(
                   child: Center(
                     child: Text(
-                      'Absensi dengan menggunakan\nQRCode dan lokasi',
+                      'Scan QR Code yang ada pada website\ndan Wholaa kamu berhasil absen!',
                       textAlign: TextAlign.center,
                       style: greyTextStyle1.copyWith(
                           fontSize: 13, fontWeight: medium),
@@ -55,9 +92,9 @@ class SuccessSignUpScreen extends StatelessWidget {
                   ),
                 ),
                 CustomButton(
-                    text: 'Masuk',
+                    text: 'Mulai Absen',
                     onPressed: () {
-                      Navigator.pushNamed(context, '/login');
+                      scanQR();
                     },
                     backgroundColor: kPrimaryColor),
               ],
