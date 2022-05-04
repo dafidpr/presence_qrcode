@@ -6,7 +6,8 @@ import 'package:presence_qrcode/ui/widgets/custom_button.dart';
 import 'package:presence_qrcode/ui/widgets/custom_input.dart';
 
 class FailedScanScreen extends StatelessWidget {
-  const FailedScanScreen({Key? key}) : super(key: key);
+  String message;
+  FailedScanScreen({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class FailedScanScreen extends StatelessWidget {
                 Container(
                   child: Center(
                     child: Text(
-                      'Kegagalan bisa terjadi karena sudah melakukan \nabsensi atau masalah koneksi nternet',
+                      message,
                       textAlign: TextAlign.center,
                       style: greyTextStyle1.copyWith(
                           fontSize: 13, fontWeight: medium),
@@ -56,7 +57,9 @@ class FailedScanScreen extends StatelessWidget {
                 ),
                 CustomButton(
                     text: 'Kembali',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     backgroundColor: kPrimaryColor),
               ],
             ),

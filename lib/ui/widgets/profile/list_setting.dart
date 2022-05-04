@@ -6,12 +6,13 @@ import 'package:presence_qrcode/shared/theme.dart';
 class ListSetting extends StatelessWidget {
   final IconData icon;
   final String title;
+  final VoidCallback onTap;
 
-  ListSetting({required this.icon, required this.title});
+  ListSetting({required this.icon, required this.title, required this.onTap});
 
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => print('success tap'),
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         height: 57,

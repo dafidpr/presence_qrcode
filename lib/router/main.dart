@@ -14,10 +14,10 @@ Map<String, WidgetBuilder> buildRouter(BuildContext context) {
     'page': (context) => MainPage(),
     '/home': (context) => HomeScreen(),
     '/login': (context) => SignInScreen(),
-    '/register': (context) => SignUpScreen(),
-    '/success-signup': (context) => SuccessSignUpScreen(),
-    '/success-scan': (context) => SuccessScanScreen(),
-    '/failed-scan': (context) => FailedScanScreen(),
+    // '/register': (context) => SignUpScreen(),
+    // '/success-signup': (context) => SuccessSignUpScreen(),
+    // '/success-scan': (context) => SuccessScanScreen(),
+    // '/failed-scan': (context) => FailedScanScreen(),
     '/splash': (context) => SplashScreen(),
   };
 }

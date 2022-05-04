@@ -1,88 +1,142 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:presence_qrcode/services/api/rest_api_service.dart';
 import 'package:presence_qrcode/shared/theme.dart';
 import 'package:presence_qrcode/ui/widgets/profile/list_setting.dart';
+import 'package:presence_qrcode/ui/widgets/spinner.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String? name, username, email;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    _getUserData();
+    super.initState();
+  }
+
+  _getUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    var user = json.decode(prefs.getString('user') ?? '');
+    setState(() {
+      name = user['name'];
+      username = user['username'];
+      email = user['email'];
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: kBackgroundColor,
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                child: Image.asset(
-                  'assets/images/background_home.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.2,
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.04,
-                    bottom: 35,
-                    left: defaultMargin,
-                    right: defaultMargin),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+      child: _isLoading == true
+          ? LoadingSpinner()
+          : Scaffold(
+              backgroundColor: kBackgroundColor,
+              body: SingleChildScrollView(
+                child: Stack(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      child: CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/user.png'),
-                        // radius: 20,
-                        minRadius: 20,
-                        maxRadius: 40,
+                      width: double.infinity,
+                      child: Image.asset(
+                        'assets/images/background_home.png',
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Text(
-                      'Dafid Prasetyo',
-                      style: whiteTextStyle.copyWith(
-                          fontSize: 16, fontWeight: semiBold),
+                    Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.04,
+                          bottom: 35,
+                          left: defaultMargin,
+                          right: defaultMargin),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/images/user.png'),
+                              // radius: 20,
+                              minRadius: 20,
+                              maxRadius: 40,
+                            ),
+                          ),
+                          Text(
+                            '$name',
+                            style: whiteTextStyle.copyWith(
+                                fontSize: 16, fontWeight: semiBold),
+                          ),
+                          Text(
+                            '$username | $email',
+                            style: whiteTextStyle.copyWith(
+                                fontSize: 11, fontWeight: medium),
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(
-                      'dafidpr | dafidpr@gmail.com',
-                      style: whiteTextStyle.copyWith(
-                          fontSize: 11, fontWeight: medium),
-                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.3,
+                        left: defaultMargin,
+                        right: defaultMargin,
+                        bottom: defaultMargin,
+                      ),
+                      child: Column(
+                        children: [
+                          ListSetting(
+                            onTap: () {},
+                            title: 'Account',
+                            icon: IconlyBold.profile,
+                          ),
+                          ListSetting(
+                            onTap: () {},
+                            title: 'Password',
+                            icon: IconlyBold.unlock,
+                          ),
+                          ListSetting(
+                            onTap: () {},
+                            title: 'Tentang Aplikasi',
+                            icon: IconlyBold.category,
+                          ),
+                          ListSetting(
+                            onTap: () {
+                              _logout();
+                            },
+                            title: 'Keluar',
+                            icon: IconlyBold.logout,
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.3,
-                  left: defaultMargin,
-                  right: defaultMargin,
-                  bottom: defaultMargin,
-                ),
-                child: Column(
-                  children: [
-                    ListSetting(
-                      title: 'Account',
-                      icon: IconlyBold.profile,
-                    ),
-                    ListSetting(
-                      title: 'Password',
-                      icon: IconlyBold.unlock,
-                    ),
-                    ListSetting(
-                      title: 'Tentang Aplikasi',
-                      icon: IconlyBold.category,
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+            ),
     );
+  }
+
+  void _logout() async {
+    var res = await ApiService().getData('auth/logout');
+    var body = json.decode(res.body);
+    if (body['success'] == true) {
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.remove('user');
+      localStorage.remove('token');
+      Navigator.pushNamed(context, '/login');
+    }
   }
 }

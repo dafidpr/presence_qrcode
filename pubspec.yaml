@@ -38,6 +38,10 @@ dependencies:
   iconly: ^1.0.1
   flutter_feather_icons: ^2.0.0+1
   flutter_barcode_scanner: ^2.0.0
+  shared_preferences: ^2.0.13
+  http: ^0.13.4
+  intl: ^0.17.0
+  geolocator: ^8.2.0
 
 dev_dependencies:
   flutter_test:

@@ -6,7 +6,8 @@ import 'package:presence_qrcode/ui/widgets/custom_button.dart';
 import 'package:presence_qrcode/ui/widgets/custom_input.dart';
 
 class SuccessScanScreen extends StatelessWidget {
-  const SuccessScanScreen({Key? key}) : super(key: key);
+  String message;
+  SuccessScanScreen({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class SuccessScanScreen extends StatelessWidget {
                 Container(
                   child: Center(
                     child: Text(
-                      'Kamu melakukan absensi datang \npada tanggal 22 April 2022 pukul 06.00',
+                      message,
                       textAlign: TextAlign.center,
                       style: greyTextStyle1.copyWith(
                           fontSize: 13, fontWeight: medium),

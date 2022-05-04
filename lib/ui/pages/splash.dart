@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:presence_qrcode/shared/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -10,11 +11,21 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushNamed(context, '/login');
+    Timer(Duration(seconds: 5), () {
+      _checkIfLoggedIn();
     });
 
     super.initState();
+  }
+
+  void _checkIfLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    if (token != null) {
+      Navigator.pushNamed(context, 'page');
+    } else {
+      Navigator.pushNamed(context, '/login');
+    }
   }
 
   @override

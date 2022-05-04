@@ -5,8 +5,21 @@ import 'package:presence_qrcode/shared/theme.dart';
 import 'package:presence_qrcode/ui/widgets/custom_button.dart';
 import 'package:presence_qrcode/ui/widgets/custom_input.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  bool _isLoading = false;
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +57,38 @@ class SignUpScreen extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                CustomInput(
-                    hintText: 'your full name',
-                    obscureText: false,
-                    prefixIcon: IconlyBold.user_3),
-                CustomInput(
-                    hintText: 'your email',
-                    obscureText: false,
-                    prefixIcon: IconlyBold.message),
-                CustomInput(
-                    hintText: 'your username',
-                    obscureText: false,
-                    prefixIcon: IconlyBold.profile),
-                CustomInput(
-                    hintText: 'your password',
-                    obscureText: true,
-                    prefixIcon: IconlyBold.lock),
-                CustomButton(
-                    text: 'Daftar',
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/success-signup');
-                    },
-                    backgroundColor: kPrimaryColor),
+                Form(
+                  child: Column(
+                    children: [
+                      CustomInput(
+                          controller: _nameController,
+                          hintText: 'your full name',
+                          obscureText: false,
+                          prefixIcon: IconlyBold.user_3),
+                      CustomInput(
+                          controller: _emailController,
+                          hintText: 'your email',
+                          obscureText: false,
+                          prefixIcon: IconlyBold.message),
+                      CustomInput(
+                          controller: _usernameController,
+                          hintText: 'your username',
+                          obscureText: false,
+                          prefixIcon: IconlyBold.profile),
+                      CustomInput(
+                          controller: _passwordController,
+                          hintText: 'your password',
+                          obscureText: true,
+                          prefixIcon: IconlyBold.lock),
+                      CustomButton(
+                          text: 'Daftar',
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/success-signup');
+                          },
+                          backgroundColor: kPrimaryColor),
+                    ],
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 30),
                   child: Row(

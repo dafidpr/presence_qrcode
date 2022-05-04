@@ -3,14 +3,14 @@ import 'package:iconly/iconly.dart';
 import 'package:presence_qrcode/shared/theme.dart';
 
 class ListPresence extends StatelessWidget {
-  final bool isDatang;
+  final bool isCheckin;
   final String presenceDate;
   final String presenceTime;
   // final String latitude;
   // final String longitude;
 
   ListPresence(
-      {this.isDatang = true,
+      {this.isCheckin = true,
       required this.presenceDate,
       required this.presenceTime});
 
@@ -19,7 +19,7 @@ class ListPresence extends StatelessWidget {
       onTap: () => print('success tap'),
       child: Container(
         width: double.infinity,
-        height: 57,
+        height: 65,
         margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(defaultRadius),
@@ -45,9 +45,9 @@ class ListPresence extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    'Absensi ${isDatang == true ? 'Datang' : 'Pulang'}',
+                    'Absensi ${isCheckin == true ? 'Datang' : 'Pulang'}',
                     style: blackTextStyle.copyWith(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: semiBold,
                     ),
                   ),
@@ -56,7 +56,7 @@ class ListPresence extends StatelessWidget {
                   child: Text(
                     'Tanggal ${presenceDate} Pukul ${presenceTime}',
                     style: blackTextStyle.copyWith(
-                      fontSize: 7,
+                      fontSize: 9,
                       fontWeight: regular,
                     ),
                   ),
