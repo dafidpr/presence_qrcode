@@ -6,17 +6,19 @@ class ListPresence extends StatelessWidget {
   final bool isCheckin;
   final String presenceDate;
   final String presenceTime;
+  final VoidCallback onTap;
   // final String latitude;
   // final String longitude;
 
   ListPresence(
       {this.isCheckin = true,
       required this.presenceDate,
-      required this.presenceTime});
+      required this.presenceTime,
+      required this.onTap});
 
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => print('success tap'),
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         height: 65,

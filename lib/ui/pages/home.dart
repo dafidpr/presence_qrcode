@@ -1,16 +1,13 @@
 import 'dart:convert';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:iconly/iconly.dart';
 import 'package:presence_qrcode/services/api/rest_api_service.dart';
 import 'package:presence_qrcode/shared/theme.dart';
+import 'package:presence_qrcode/ui/pages/presence_detail.dart';
 import 'package:presence_qrcode/ui/widgets/home/list_presence.dart';
 import 'package:presence_qrcode/ui/widgets/home/overview_card.dart';
 import 'package:presence_qrcode/ui/widgets/spinner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,11 +18,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? name;
-  String? attendace;
-  String? absence;
-  String? currentMonth;
-  List<dynamic>? listPresences;
+  String? _name;
+  String? _attendace;
+  String? _absence;
+  String? _currentMonth;
+  List<dynamic>? _listPresences;
   bool _isLoading = true;
 
   @override
@@ -41,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final prefs = await SharedPreferences.getInstance();
     var user = json.decode(prefs.getString('user') ?? '');
     setState(() {
-      name = user['name'];
+      _name = user['name'];
     });
   }
 
@@ -50,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final DateFormat formater = DateFormat('MMM yyyy');
     final String formated = formater.format(DateTime.parse(now));
     setState(() {
-      currentMonth = formated;
+      _currentMonth = formated;
     });
   }
 
@@ -59,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
-        listPresences = data['data'];
+        _listPresences = data['data'];
         _isLoading = false;
       });
     }
@@ -70,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
     var data = json.decode(res.body);
     if (data['success'] == true) {
       setState(() {
-        attendace = data['data']['attendance'].toString();
-        absence = data['data']['absence'].toString();
+        _attendace = data['data']['attendance'].toString();
+        _absence = data['data']['absence'].toString();
       });
     }
   }
@@ -111,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontSize: 24, fontWeight: semiBold),
                               ),
                               Text(
-                                'Welcome back, $name!',
+                                'Welcome back, $_name!',
                                 style: whiteTextStyle.copyWith(
                                     fontSize: 11, fontWeight: medium),
                               ),
@@ -129,9 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     OverViewCardWidget(
-                      countPresent: '$attendace',
-                      countAbsent: '$absence',
-                      month: '$currentMonth',
+                      countPresent: '$_attendace',
+                      countAbsent: '$_absence',
+                      month: '$_currentMonth',
                     ),
                     Container(
                       margin: EdgeInsets.only(
@@ -153,10 +150,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               Container(
-                                child: Text(
-                                  'Lihat Semua',
-                                  style: blackTextStyle.copyWith(
-                                      fontSize: 10, fontWeight: regular),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/presence-history');
+                                  },
+                                  child: Text(
+                                    'Lihat Semua',
+                                    style: blackTextStyle.copyWith(
+                                        fontSize: 10, fontWeight: regular),
+                                  ),
                                 ),
                               ),
                             ],
@@ -164,19 +167,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: 15,
                           ),
-                          for (var item in listPresences ?? [])
+                          for (var item in _listPresences ?? [])
                             ListPresence(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PresenceDetailScreen(
+                                        presenceID: item['id'].toString()),
+                                  ),
+                                );
+                              },
                               isCheckin:
                                   item['type'] == 'checkin' ? true : false,
                               presenceDate: item['date'],
                               presenceTime: item['time_in'],
                             ),
-
-                          // ListPresence(
-                          //   isDatang: false,
-                          //   presenceDate: '22 April 2022',
-                          //   presenceTime: '06:00',
-                          // ),
                         ],
                       ),
                     )
