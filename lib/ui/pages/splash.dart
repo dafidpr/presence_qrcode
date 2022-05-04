@@ -67,6 +67,21 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 50,
+              ),
+              Container(
+                child: Center(
+                  child: Text(
+                    'Powered by Dafid Prasetyo',
+                    textAlign: TextAlign.center,
+                    style: greyTextStyle1.copyWith(
+                      fontSize: 12,
+                      fontWeight: medium,
+                    ),
+                  ),
+                ),
+              ),
             ],
           )
         ],
