@@ -64,7 +64,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       qrScanRes = qrScanRes;
       _isLoading = true;
     });
-    await actionRequest(qrScanRes);
+    if (qrScanRes != '-1') {
+      await actionRequest(qrScanRes);
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> actionRequest(String? qrCode) async {
